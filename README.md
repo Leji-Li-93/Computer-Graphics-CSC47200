@@ -1,1 +1,1 @@
-# Computer-Graphics
+# Computer-Graphics-CSC47200
