@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>hw0/vshader0c.glsl</file>
+        <file>hw0/fshader0c.glsl</file>
+	<file>mandrill.jpg</file>
+    </qresource>
+</RCC>
