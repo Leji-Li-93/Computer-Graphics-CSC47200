@@ -22,7 +22,7 @@ HW1b::HW1b(const QGLFormat &glf, QWidget *parent)
 {
 	// init vars
 	m_theta		= 0;
-	m_subdivisions	= 4;
+    m_subdivisions	= 4;
 	m_updateColor	= 1;
 	m_twist		= 1;
 }
@@ -88,12 +88,16 @@ void HW1b::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT);
     glBegin(GL_TRIANGLES);
     for (size_t i = 0; i <=sizeof(m_points); i+=3) {
+
+        glColor3f(m_colors[i][0],m_colors[i][1],m_colors[i][2]);
         glVertex2f(m_points[i][0],m_points[i][1]);
         glVertex2f(m_points[i+1][0],m_points[i+1][1]);
         glVertex2f(m_points[i+2][0],m_points[i+2][1]);
-    }
 
+    }
     glEnd();
+
+
 
 }
 
@@ -343,7 +347,7 @@ void HW1b::changeTwist(int twist) {
 	m_updateColor = 0;
 
 	// redraw
-	m_points.clear();
+    m_points.clear();
 	initBuffers();
 	updateGL();
 }
