@@ -51,7 +51,26 @@ void HW1b::initializeGL() {
 // The input parameters are the window width (w) and height (h).
 //
 void HW1b::resizeGL(int w, int h) {
-	// PUT YOUR CODE HERE
+    // compute aspect ratio - from hw0c.cpp
+    float ar = (float) w / h;
+
+    // set xmax, ymax;
+    float xmax, ymax;
+    if(ar > 1.0) {		// wide screen
+        xmax = ar;
+        ymax = 1.;
+    }
+    else {		// tall screen
+        xmax = 1.;
+        ymax = 1 / ar;
+    }
+
+    // set viewport to occupy full canvas
+    glViewport(0, 0, w, h);
+
+    // init viewing coordinates for orthographic projection
+    glLoadIdentity();
+    glOrtho(-xmax, xmax, -ymax, ymax, -1.0, 1.0);
 }
 
 
@@ -62,7 +81,13 @@ void HW1b::resizeGL(int w, int h) {
 // Update GL scene.
 //
 void HW1b::paintGL() {
-	// PUT YOUR CODE HERE
+    // clear canvas with background values
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBegin(GL_TRIANGLES);
+
+    glEnd();
+
 }
 
 
@@ -191,7 +216,14 @@ void HW1b::initBuffers() {
 // Recursive subdivision of triangle (a,b,c). Recurse count times.
 //
 void HW1b::divideTriangle(vec2 a, vec2 b, vec2 c, int count) {
-	// PUT YOUR CODE HERE
+    // PUT YOUR CODE HERE
+    if (count == 0) {
+        return triangle(a,b,c);
+    }
+    else {
+        divideTriangle(a/2,b/2,c/2,count-1);
+    }
+
 }
 
 
