@@ -119,19 +119,18 @@ void HW1a::paintGL() {
     // local variables
     int current_shape = 0;
 
-    for (int i = 0; i < sizeof(DrawModes); i++) {
+    for (int i = 0; i < 16; i++) {
         // separate them
         glViewport((i%3)*m_winW, (i/3)*m_winH, m_winW, m_winH);
 
         // define the drawing mode
         glBegin(DrawModes[current_shape]);
         // go through the vertices - similar to hw0b.cpp
-        for (int j = 0; j < sizeof(Vertices); j+=2) {
+        for (int j = 0; j < 32; j+=2) {
             // cout << Vertices[j] << " " << Vertices[j+1] << endl;
             glVertex2f(Vertices[j],Vertices[j+1]);
         }
         glEnd();
-        glFlush();
         current_shape++;
     }
 }
