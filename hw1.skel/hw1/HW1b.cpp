@@ -33,9 +33,7 @@ HW1b::HW1b(const QGLFormat &glf, QWidget *parent)
 // Initialization routine before display loop.
 // Gets called once before the first time resizeGL() or paintGL() is called.
 //
-void
-HW1b::initializeGL()
-{
+void HW1b::initializeGL() {
 	// init vertex and color buffers
 	initBuffers();
 
@@ -52,9 +50,7 @@ HW1b::initializeGL()
 // Resize event handler.
 // The input parameters are the window width (w) and height (h).
 //
-void
-HW1b::resizeGL(int w, int h)
-{
+void HW1b::resizeGL(int w, int h) {
 	// PUT YOUR CODE HERE
 }
 
@@ -65,9 +61,7 @@ HW1b::resizeGL(int w, int h)
 //
 // Update GL scene.
 //
-void
-HW1b::paintGL()
-{
+void HW1b::paintGL() {
 	// PUT YOUR CODE HERE
 }
 
@@ -78,9 +72,7 @@ HW1b::paintGL()
 //
 // Create control panel groupbox.
 //
-QGroupBox*
-HW1b::controlPanel()
-{
+QGroupBox* HW1b::controlPanel() {
 	// init group box
 	QGroupBox *groupBox = new QGroupBox("Homework 1b");
 	groupBox->setStyleSheet(GroupBoxStyle);
@@ -141,9 +133,7 @@ HW1b::controlPanel()
 //
 // Reset parameters.
 //
-void
-HW1b::reset()
-{
+void HW1b::reset() {
 	// reset parameters
 	m_theta		= 0;
 	m_subdivisions	= 4;
@@ -181,9 +171,7 @@ HW1b::reset()
 //
 // Initialize vertex buffer.
 //
-void
-HW1b::initBuffers()
-{
+void HW1b::initBuffers() {
 	const QVector2D vertices[] = {
 		 QVector2D( 0.0f ,  0.75f),
 		 QVector2D( 0.65f, -0.375f),
@@ -202,9 +190,7 @@ HW1b::initBuffers()
 //
 // Recursive subdivision of triangle (a,b,c). Recurse count times.
 //
-void
-HW1b::divideTriangle(vec2 a, vec2 b, vec2 c, int count)
-{
+void HW1b::divideTriangle(vec2 a, vec2 b, vec2 c, int count) {
 	// PUT YOUR CODE HERE
 }
 
@@ -215,9 +201,7 @@ HW1b::divideTriangle(vec2 a, vec2 b, vec2 c, int count)
 //
 // Push positions and colors of the three triangle vertices.
 //
-void
-HW1b::triangle(vec2 a, vec2 b, vec2 c)
-{
+void HW1b::triangle(vec2 a, vec2 b, vec2 c) {
 	// init color
 	if(m_updateColor) {
 		m_colors.push_back(vec3((float) rand()/RAND_MAX,
@@ -238,9 +222,7 @@ HW1b::triangle(vec2 a, vec2 b, vec2 c)
 //
 // Rotate point p based on rotation angle Theta and distance from origin (for Twist = true)
 //
-vec2
-HW1b::rotTwist(vec2 p)
-{
+vec2 HW1b::rotTwist(vec2 p) {
 	float d = m_twist ? sqrt(p[0]*p[0] + p[1]*p[1]) : 1;
 	float sinTheta = sin(d*m_theta);
 	float cosTheta = cos(d*m_theta);
@@ -254,9 +236,7 @@ HW1b::rotTwist(vec2 p)
 //
 // Slot function to change rotation angle.
 //
-void
-HW1b::changeTheta(int angle)
-{
+void HW1b::changeTheta(int angle) {
 	// update slider and spinbox
 	m_sliderTheta->blockSignals(true);
 	m_sliderTheta->setValue(angle);
@@ -283,9 +263,7 @@ HW1b::changeTheta(int angle)
 //
 // Slot function to change number of recursive subdivisions.
 //
-void
-HW1b::changeSubdiv(int subdivisions)
-{
+void HW1b::changeSubdiv(int subdivisions) {
 	// update slider and spinbox
 	m_sliderSubdiv->blockSignals(true);
 	m_sliderSubdiv->setValue(subdivisions);
@@ -313,9 +291,7 @@ HW1b::changeSubdiv(int subdivisions)
 //
 // Slot function to turn on/off m_twist;
 //
-void
-HW1b::changeTwist(int twist)
-{
+void HW1b::changeTwist(int twist) {
 	// init vars
 	m_twist = twist;
 	m_updateColor = 0;
