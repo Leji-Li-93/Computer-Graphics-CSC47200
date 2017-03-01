@@ -8,6 +8,8 @@
 // ===============================================================
 
 #include "HW1b.h"
+#include <iostream>
+using namespace std;
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,7 +37,7 @@ HW1b::HW1b(const QGLFormat &glf, QWidget *parent)
 //
 void HW1b::initializeGL() {
 	// init vertex and color buffers
-	initBuffers();
+    initBuffers();
 
 	// init state variables
 	glClearColor(0.0, 0.0, 0.0, 1.0);	// set background color
@@ -80,11 +82,16 @@ void HW1b::resizeGL(int w, int h) {
 //
 // Update GL scene.
 //
+
 void HW1b::paintGL() {
     // clear canvas with background values
     glClear(GL_COLOR_BUFFER_BIT);
-
     glBegin(GL_TRIANGLES);
+    for (size_t i = 0; i <=sizeof(m_points); i+=3) {
+        glVertex2f(m_points[i][0],m_points[i][1]);
+        glVertex2f(m_points[i+1][0],m_points[i+1][1]);
+        glVertex2f(m_points[i+2][0],m_points[i+2][1]);
+    }
 
     glEnd();
 
@@ -216,12 +223,18 @@ void HW1b::initBuffers() {
 // Recursive subdivision of triangle (a,b,c). Recurse count times.
 //
 void HW1b::divideTriangle(vec2 a, vec2 b, vec2 c, int count) {
-    // PUT YOUR CODE HERE
-    if (count == 0) {
-        return triangle(a,b,c);
-    }
+    if (count == 0)
+        triangle(a,b,c);
     else {
-        divideTriangle(a/2,b/2,c/2,count-1);
+        QVector2D ab, bc, ac;
+        ab = QVector2D((a[0]+b[0])/2, (a[1]+b[1])/2); // ab
+        bc = QVector2D((b[0]+c[0])/2, (b[1]+c[1])/2); // bc
+        ac = QVector2D((c[0]+a[0])/2, (c[1]+a[1])/2); // ca
+
+        divideTriangle(a, ab, ac, count-1);
+        divideTriangle(b, ab, bc, count-1);
+        divideTriangle(c, ac, bc, count-1);
+        divideTriangle(ab, bc, ac, count-1);
     }
 
 }
@@ -240,8 +253,9 @@ void HW1b::triangle(vec2 a, vec2 b, vec2 c) {
 					(float) rand()/RAND_MAX,
 					(float) rand()/RAND_MAX));
 	}
-
-	// init geometry
+    //cout<<a[0]<<" "<<a[1]<<endl;
+    //cout<<b[0]<<" "<<b[1]<<endl;
+    // init geometry
 	m_points.push_back(rotTwist(a));
 	m_points.push_back(rotTwist(b));
 	m_points.push_back(rotTwist(c));
