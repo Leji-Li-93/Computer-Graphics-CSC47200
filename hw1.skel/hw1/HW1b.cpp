@@ -34,12 +34,12 @@ HW1b::HW1b(const QGLFormat &glf, QWidget *parent)
 // Gets called once before the first time resizeGL() or paintGL() is called.
 //
 void HW1b::initializeGL() {
+    // init vertex and color buffers
+    initBuffers();
+
     // init state variables
     glClearColor(0.0, 0.0, 0.0, 1.0);	// set background color
     glColor3f   (1.0, 1.0, 1.0);		// set foreground color
-
-	// init vertex and color buffers
-    initBuffers();
 }
 
 
@@ -87,23 +87,17 @@ void HW1b::resizeGL(int w, int h) {
 void HW1b::paintGL() {
     // clear canvas with background values
     glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_TRIANGLES);
+
+    // local variables
     int j = 0;
-    if (m_subdivisions == 0) {
-        for (size_t i = 0; i <= m_points.size(); i+=3) {
-            glVertex2f(m_points[i][0],m_points[i][1]);
-            glVertex2f(m_points[i+1][0],m_points[i+1][1]);
-            glVertex2f(m_points[i+2][0],m_points[i+2][1]);
-        }
-    }
-    else {
-        for (size_t i = 0; i <= m_points.size(); i+=3) {
-            glColor3f(m_colors[j][0],m_colors[j][1],m_colors[j][2]);
-            glVertex2f(m_points[i][0],m_points[i][1]);
-            glVertex2f(m_points[i+1][0],m_points[i+1][1]);
-            glVertex2f(m_points[i+2][0],m_points[i+2][1]);
-            j++;
-        }
+
+    glBegin(GL_TRIANGLES);
+    for (size_t i = 0; i <= m_points.size() - 3; i+=3) {
+        glColor3f(m_colors[j][0],m_colors[j][1],m_colors[j][2]);
+        glVertex2f(m_points[i][0],m_points[i][1]);
+        glVertex2f(m_points[i+1][0],m_points[i+1][1]);
+        glVertex2f(m_points[i+2][0],m_points[i+2][1]);
+        j++;
     }
     glEnd();
 
