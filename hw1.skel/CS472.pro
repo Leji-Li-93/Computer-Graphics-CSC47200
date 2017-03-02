@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = CS472
-QT += widgets opengl 
+QT += widgets opengl
 CONFIG += qt debug_and_release
 RESOURCES   = CS472.qrc
 
@@ -13,7 +13,7 @@ Debug:MOC_DIR       = debug/.moc
 win32-msvc2015{
 	RC_FILE        += CS472.rc
 	LIBS           += -lopengl32
-	QMAKE_CXXFLAGS += /MP /Zi
+        QMAKE_CXXFLAGS += /MP /Zi
 	QMAKE_LFLAGS   += /MACHINE:X64
 }
 

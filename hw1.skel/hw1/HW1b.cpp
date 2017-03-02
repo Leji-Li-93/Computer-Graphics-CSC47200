@@ -8,8 +8,6 @@
 // ===============================================================
 
 #include "HW1b.h"
-#include <iostream>
-using namespace std;
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,12 +34,12 @@ HW1b::HW1b(const QGLFormat &glf, QWidget *parent)
 // Gets called once before the first time resizeGL() or paintGL() is called.
 //
 void HW1b::initializeGL() {
+    // init state variables
+    glClearColor(0.0, 0.0, 0.0, 1.0);	// set background color
+    glColor3f   (1.0, 1.0, 1.0);		// set foreground color
+
 	// init vertex and color buffers
     initBuffers();
-
-	// init state variables
-	glClearColor(0.0, 0.0, 0.0, 1.0);	// set background color
-	glColor3f   (1.0, 1.0, 1.0);		// set foreground color
 }
 
 
@@ -53,6 +51,9 @@ void HW1b::initializeGL() {
 // The input parameters are the window width (w) and height (h).
 //
 void HW1b::resizeGL(int w, int h) {
+
+    m_winH = h;
+    m_winW = w;
     // compute aspect ratio - from hw0c.cpp
     float ar = (float) w / h;
 
@@ -87,17 +88,24 @@ void HW1b::paintGL() {
     // clear canvas with background values
     glClear(GL_COLOR_BUFFER_BIT);
     glBegin(GL_TRIANGLES);
-    for (size_t i = 0; i <=sizeof(m_points); i+=3) {
-
-        glColor3f(m_colors[i][0],m_colors[i][1],m_colors[i][2]);
-        glVertex2f(m_points[i][0],m_points[i][1]);
-        glVertex2f(m_points[i+1][0],m_points[i+1][1]);
-        glVertex2f(m_points[i+2][0],m_points[i+2][1]);
-
+    int j = 0;
+    if (m_subdivisions == 0) {
+        for (size_t i = 0; i <= m_points.size(); i+=3) {
+            glVertex2f(m_points[i][0],m_points[i][1]);
+            glVertex2f(m_points[i+1][0],m_points[i+1][1]);
+            glVertex2f(m_points[i+2][0],m_points[i+2][1]);
+        }
+    }
+    else {
+        for (size_t i = 0; i <= m_points.size(); i+=3) {
+            glColor3f(m_colors[j][0],m_colors[j][1],m_colors[j][2]);
+            glVertex2f(m_points[i][0],m_points[i][1]);
+            glVertex2f(m_points[i+1][0],m_points[i+1][1]);
+            glVertex2f(m_points[i+2][0],m_points[i+2][1]);
+            j++;
+        }
     }
     glEnd();
-
-
 
 }
 
@@ -257,8 +265,6 @@ void HW1b::triangle(vec2 a, vec2 b, vec2 c) {
 					(float) rand()/RAND_MAX,
 					(float) rand()/RAND_MAX));
 	}
-    //cout<<a[0]<<" "<<a[1]<<endl;
-    //cout<<b[0]<<" "<<b[1]<<endl;
     // init geometry
 	m_points.push_back(rotTwist(a));
 	m_points.push_back(rotTwist(b));
