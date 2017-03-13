@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>hw0/vshader0c.glsl</file>
+        <file>hw0/fshader0c.glsl</file>
+        <file>hw2/vshader2a.glsl</file>
+        <file>hw2/fshader2a.glsl</file>
+        <file>hw2/vshader2b.glsl</file>
+        <file>hw2/fshader2b.glsl</file>
+    </qresource>
+</RCC>
