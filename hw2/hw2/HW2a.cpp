@@ -131,14 +131,26 @@ HW2a::paintGL()
 	// *      *     *     *
 	// ********************
 
-    // use glsl program
-    for (int i = 0; i < 9; i++) {
+    int current_shape = 0;
+
+    // use glsl progam
+    glUseProgram(m_program[HW2A].programId());
+
+    // pass the following parameters to vertex the shader:
+    // projection matrix, modelview matrix, and "reverse" flag
+    glUniformMatrix4fv(m_uniform[HW2A][PROJ ], 1, GL_FALSE, m_projection.constData ());
+
+    for (int i = 0; i < 16; i++) {
         // separate them
         glViewport((i%3)*m_winW, (i/3)*m_winH, m_winW, m_winH);
 
         // go through the vertices
-        glDrawArrays(DrawModes[i], 0, m_vertNum);
+        glDrawArrays(DrawModes[current_shape], 0, m_vertNum);
+        current_shape++;
     }
+
+    // terminate program; rendering is done
+    glUseProgram(0);
 
 	// disable vertex shader point size adjustment
 	glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
@@ -202,22 +214,22 @@ void
 HW2a::initVertexBuffer()
 {
 	float vv[] = {
-	        -0.5 , -0.75,
-	        -0.5 , -0.5 ,
-	        -0.5 , -0.25,
-	        -0.5 ,  0.0 ,
-	        -0.5 ,  0.25,
-	        -0.5 ,  0.5 ,
-	        -0.25,  0.75,
-	         0.0 ,  0.75,
-	         0.25,  0.75,
-	         0.5 ,  0.75,
-	         0.75 , 0.5 ,
-	         0.75,  0.25,
-	         0.5 ,  0.0 ,
-	         0.25,  0.0 ,
-	         0.0,   0.0 ,
-	        -0.25,  0.0 
+            -0.5 , -0.75,
+            -0.5 , -0.5 ,
+            -0.5 , -0.25,
+            -0.5 ,  0.0 ,
+            -0.5 ,  0.25,
+            -0.5 ,  0.5 ,
+            -0.25,  0.75,
+             0.0 ,  0.75,
+             0.25,  0.75,
+             0.5 ,  0.75,
+             0.75 , 0.5 ,
+             0.75,  0.25,
+             0.5 ,  0.0 ,
+             0.25,  0.0 ,
+             0.0,   0.0 ,
+            -0.25,  0.0
 	};
 	std::vector<float> v (&vv[0], &vv[0]+sizeof(vv)/sizeof(float));
 
