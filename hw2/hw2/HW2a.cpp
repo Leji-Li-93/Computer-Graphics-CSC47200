@@ -71,7 +71,30 @@ HW2a::initializeGL()
 void
 HW2a::resizeGL(int w, int h)
 {
-	// PUT YOUR CODE HERE
+    // divide window into 9 boxes (3x3)
+    m_winW = w/3;
+    m_winH = h/3;
+
+    // compute aspect ratio - from hw0c.cpp
+    float ar = (float) w / h;
+
+    // set xmax, ymax;
+    float xmax, ymax;
+    if(ar > 1.0) {		// wide screen
+        xmax = ar;
+        ymax = 1.;
+    }
+    else {		// tall screen
+        xmax = 1.;
+        ymax = 1 / ar;
+    }
+
+    // set viewport to occupy full canvas
+    glViewport(0, 0, w, h);
+
+    // init viewing coordinates for orthographic projection
+    glLoadIdentity();
+    glOrtho(-xmax, xmax, -ymax, ymax, -1.0, 1.0);
 }
 
 
