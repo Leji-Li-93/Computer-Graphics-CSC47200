@@ -112,16 +112,18 @@ MainWindow::createWidgets()
 	QGLFormat glfLegacy = QGLFormat::defaultFormat();	// base format
 	glfLegacy.setProfile(QGLFormat::CompatibilityProfile);	// also support legacy version
 	glfLegacy.setSampleBuffers(true);			// multisample buffer support for antialiasing (AA)
-	glfLegacy.setSamples(4);				// number of samples per fragment for AA
+    glfLegacy.setSamples(4);				// number of samples per fragment for AA
 	glfLegacy.setDefaultFormat(glfLegacy);			// use modified parameters
 
 	// format for modern OpenGL (3.3+) with newer GLSL (supporting in/out/layout)
 	QGLFormat glfModern = QGLFormat::defaultFormat();	// base format
-	glfModern.setVersion(3, 3);				// Mac requires 3.3+ for core profile
-	glfModern.setProfile(QGLFormat::CoreProfile);		// don't use deprecated functions
+    glfModern.setVersion(3, 3);				// Mac requires 3.3+ for core profile
+    glfModern.setProfile(QGLFormat::CompatibilityProfile);		// don't use deprecated functions
+                                                                // was CoreProfile, but I need it
+                                                                // to render GL_QUADS/POLYGON for 2a
 	glfModern.setSampleBuffers(true);			// multisample buffer support for antialiasing (AA)
 	glfModern.setSamples(4);				// number of samples per fragment (for AA)
-	glfModern.setSwapInterval(0);
+    glfModern.setSwapInterval(0);
 	glfModern.setDefaultFormat(glfModern);			// use modified parameters
 
 	// instantiate homework solution classes
@@ -131,7 +133,7 @@ MainWindow::createWidgets()
 	m_hw[m_hwName[HW0C ]] = new HW0c (glfModern);
 	m_hw[m_hwName[HW1A ]] = new HW1a (glfLegacy);
 	m_hw[m_hwName[HW1B ]] = new HW1b (glfLegacy);
-    m_hw[m_hwName[HW2A ]] = new HW2a (glfLegacy);
+    m_hw[m_hwName[HW2A ]] = new HW2a (glfModern);
 	m_hw[m_hwName[HW2B ]] = new HW2b (glfModern);
 #ifdef USE_LATER
 	m_hw[m_hwName[HW3A ]] = new HW3a (glfModern);
