@@ -131,7 +131,7 @@ MainWindow::createWidgets()
 	m_hw[m_hwName[HW0C ]] = new HW0c (glfModern);
 	m_hw[m_hwName[HW1A ]] = new HW1a (glfLegacy);
 	m_hw[m_hwName[HW1B ]] = new HW1b (glfLegacy);
-    m_hw[m_hwName[HW2A ]] = new HW2a (glfModern);
+    m_hw[m_hwName[HW2A ]] = new HW2a (glfLegacy);
 	m_hw[m_hwName[HW2B ]] = new HW2b (glfModern);
 #ifdef USE_LATER
 	m_hw[m_hwName[HW3A ]] = new HW3a (glfModern);

@@ -16,15 +16,15 @@ enum { HW2A };
 enum { PROJ };
 
 const int DrawModes[] = {
-	GL_POINTS,
-	GL_LINES,
+    GL_POINTS,
+    GL_LINES,
 	GL_LINE_STRIP,
 	GL_LINE_LOOP,
 	GL_TRIANGLES,
 	GL_TRIANGLE_STRIP,
 	GL_TRIANGLE_FAN,
-	GL_QUADS,
-	GL_POLYGON
+    GL_QUADS,
+    GL_POLYGON
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,7 +57,7 @@ HW2a::initializeGL()
 
 	// init state variables
 	glClearColor(0.0, 0.0, 0.0, 0.0);	// set background color
-	glColor3f   (1.0, 1.0, 0.0);		// set foreground color
+    glColor3f   (1.0, 1.0, 0.0);		// set foreground color
 }
 
 
@@ -72,8 +72,8 @@ void
 HW2a::resizeGL(int w, int h)
 {
     // save window dimensions
-    m_winW = w/3;
-    m_winH = h/3;
+    m_winW = w;
+    m_winH = h;
 
     // compute aspect ratio
     float ar = (float) w / h;
@@ -110,10 +110,10 @@ void
 HW2a::paintGL()
 {
 	// clear canvas with background color
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	// enable vertex shader point size adjustment
-	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // enable vertex shader point size adjustment
+    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
 	// draw data in nine viewports after splitting canvas into 3x3 cells;
 	// a different drawing mode is used in each viewport
@@ -131,29 +131,26 @@ HW2a::paintGL()
 	// *      *     *     *
 	// ********************
 
-    int current_shape = 0;
-
     // use glsl progam
     glUseProgram(m_program[HW2A].programId());
 
     // pass the following parameters to vertex the shader:
-    // projection matrix, modelview matrix, and "reverse" flag
+    // projection matrix
     glUniformMatrix4fv(m_uniform[HW2A][PROJ ], 1, GL_FALSE, m_projection.constData ());
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < sizeof(DrawModes); i++) {
         // separate them
-        glViewport((i%3)*m_winW, (i/3)*m_winH, m_winW, m_winH);
+        glViewport((i%3)*(m_winW/3), (i/3)*(m_winH/3), (m_winW/3), (m_winH/3));
 
         // go through the vertices
-        glDrawArrays(DrawModes[current_shape], 0, m_vertNum);
-        current_shape++;
+        glDrawArrays(DrawModes[i], 0, m_vertNum);
     }
 
     // terminate program; rendering is done
     glUseProgram(0);
 
 	// disable vertex shader point size adjustment
-	glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
 
 
@@ -246,5 +243,5 @@ HW2a::initVertexBuffer()
 
 	// enable vertex buffer to be accessed via the attribute vertex variable and specify data format
 	glEnableVertexAttribArray(ATTRIB_VERTEX);
-	glVertexAttribPointer	 (ATTRIB_VERTEX, 2, GL_FLOAT, false, 0, 0);
+    glVertexAttribPointer	 (ATTRIB_VERTEX, 2, GL_FLOAT, false, 0, 0);
 }
