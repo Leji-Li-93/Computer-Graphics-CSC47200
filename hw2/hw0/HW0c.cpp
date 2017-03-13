@@ -118,7 +118,7 @@ HW0c::paintGL()
 	glUniform1i	  (m_uniform[HW0D][REVERSE], m_reverseColor);
 
 	// draw triangles
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	// terminate program; rendering is done
 	glUseProgram(0);

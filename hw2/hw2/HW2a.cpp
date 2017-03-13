@@ -71,11 +71,11 @@ HW2a::initializeGL()
 void
 HW2a::resizeGL(int w, int h)
 {
-    // divide window into 9 boxes (3x3)
+    // save window dimensions
     m_winW = w/3;
     m_winH = h/3;
 
-    // compute aspect ratio - from hw0c.cpp
+    // compute aspect ratio
     float ar = (float) w / h;
 
     // set xmax, ymax;
@@ -83,8 +83,7 @@ HW2a::resizeGL(int w, int h)
     if(ar > 1.0) {		// wide screen
         xmax = ar;
         ymax = 1.;
-    }
-    else {		// tall screen
+    } else {		// tall screen
         xmax = 1.;
         ymax = 1 / ar;
     }
@@ -92,9 +91,12 @@ HW2a::resizeGL(int w, int h)
     // set viewport to occupy full canvas
     glViewport(0, 0, w, h);
 
-    // init viewing coordinates for orthographic projection
-    glLoadIdentity();
-    glOrtho(-xmax, xmax, -ymax, ymax, -1.0, 1.0);
+    // compute orthographic projection from viewing coordinates;
+    // we use Qt's 4x4 matrix class in place of legacy OpenGL code:
+    // glLoadIdentity();
+    // glOrtho(-xmax, xmax, -ymax, ymax, -1.0, 1.0);
+    m_projection.setToIdentity();
+    m_projection.ortho(-xmax, xmax, -ymax, ymax, -1.0, 1.0);
 }
 
 
@@ -129,12 +131,14 @@ HW2a::paintGL()
 	// *      *     *     *
 	// ********************
 
-	// viewport dimensions
-	int w = m_winW / 3;
-	int h = m_winH / 3;
+    // use glsl program
+    for (int i = 0; i < 9; i++) {
+        // separate them
+        glViewport((i%3)*m_winW, (i/3)*m_winH, m_winW, m_winH);
 
-	// use glsl program
-	// PUT YOUR CODE HERE
+        // go through the vertices
+        glDrawArrays(DrawModes[i], 0, m_vertNum);
+    }
 
 	// disable vertex shader point size adjustment
 	glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);

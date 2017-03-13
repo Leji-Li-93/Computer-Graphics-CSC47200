@@ -9,10 +9,6 @@
 
 #include "HW1a.h"
 
-// including for output
-#include <iostream>
-using namespace std;
-
 // init array of 16 vertices for letter 'P'
 float Vertices[] = {
     -0.5f , -0.75f,
