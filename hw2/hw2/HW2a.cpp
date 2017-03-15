@@ -140,7 +140,12 @@ HW2a::paintGL()
 
     for (unsigned int i = 0; i < sizeof(DrawModes); i++) {
         glViewport((i%3)*(m_winW/3), (i/3)*(m_winH/3), (m_winW/3), (m_winH/3));
-        glDrawArrays(DrawModes[i], 0, m_vertNum);
+        if (i == 7)
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertNum-4);
+        if (i == 8)
+            glDrawArrays(GL_TRIANGLE_FAN, 0, m_vertNum);
+        else
+            glDrawArrays(DrawModes[i], 0, m_vertNum);
     }
 
     // terminate program; rendering is done
