@@ -23,7 +23,6 @@ void main()
     
     */ // Code to rotate from HW1B
     
-    /*
     float d = 0.0;
     if (u_Twist == 1) 
         d = sqrt((a_Position.x * a_Position.x) + (a_Position.y * a_Position.y));
@@ -31,10 +30,7 @@ void main()
         d = 1.0;
     float sinTheta = sin(d*u_Theta);
     float cosTheta = cos(d*u_Theta);
-	gl_Position = u_Modelview * u_Projection * vec4((a_Position.x*cosTheta - a_Position.y*sinTheta, a_Position.x*sinTheta + a_Position.y*cosTheta), 0, 1);
-    v_Color	= vec4(a_Color, 1);
-    */
-    gl_Position = u_Modelview * u_Projection * vec4(a_Position, 0, 1);
+	gl_Position = u_Projection * vec4(vec2(a_Position.x*cosTheta - a_Position.y*sinTheta, a_Position.x*sinTheta + a_Position.y*cosTheta), 0, 1);
     v_Color	= vec4(a_Color, 1);
     
 }

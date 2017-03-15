@@ -124,6 +124,8 @@ HW2b::paintGL()
     // MV, PROJ, THETA, SUBDIV, TWIST
     glUniformMatrix4fv(m_uniform[HW2B][MV ], 1, GL_FALSE, m_modelview.constData ());
     glUniformMatrix4fv(m_uniform[HW2B][PROJ ], 1, GL_FALSE, m_projection.constData ());
+    glUniform1fv(m_uniform[HW2B][THETA ], 1, &m_theta);
+    glUniform1i(m_uniform[HW2B][TWIST ], m_twist);
 
     glDrawArrays(GL_TRIANGLES, 0, m_numPoints);
 
