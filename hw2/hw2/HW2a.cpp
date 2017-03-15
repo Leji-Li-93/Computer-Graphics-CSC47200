@@ -138,11 +138,8 @@ HW2a::paintGL()
     // projection matrix
     glUniformMatrix4fv(m_uniform[HW2A][PROJ ], 1, GL_FALSE, m_projection.constData ());
 
-    for (int i = 0; i < sizeof(DrawModes); i++) {
-        // separate them
+    for (unsigned int i = 0; i < sizeof(DrawModes); i++) {
         glViewport((i%3)*(m_winW/3), (i/3)*(m_winH/3), (m_winW/3), (m_winH/3));
-
-        // go through the vertices
         glDrawArrays(DrawModes[i], 0, m_vertNum);
     }
 

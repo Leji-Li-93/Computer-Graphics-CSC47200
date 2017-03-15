@@ -119,8 +119,6 @@ MainWindow::createWidgets()
 	QGLFormat glfModern = QGLFormat::defaultFormat();	// base format
     glfModern.setVersion(3, 3);				// Mac requires 3.3+ for core profile
     glfModern.setProfile(QGLFormat::CompatibilityProfile);		// don't use deprecated functions
-                                                                // was CoreProfile, but I need it
-                                                                // to render GL_QUADS/POLYGON for 2a
 	glfModern.setSampleBuffers(true);			// multisample buffer support for antialiasing (AA)
 	glfModern.setSamples(4);				// number of samples per fragment (for AA)
     glfModern.setSwapInterval(0);

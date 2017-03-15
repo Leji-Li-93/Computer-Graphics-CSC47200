@@ -73,7 +73,32 @@ HW2b::initializeGL()
 void
 HW2b::resizeGL(int w, int h)
 {
-	// PUT YOUR CODE HERE
+    // save window dimensions
+    m_winW = w;
+    m_winH = h;
+
+    // compute aspect ratio
+    float ar = (float) w / h;
+
+    // set xmax, ymax;
+    float xmax, ymax;
+    if(ar > 1.0) {		// wide screen
+        xmax = ar;
+        ymax = 1.;
+    } else {		// tall screen
+        xmax = 1.;
+        ymax = 1 / ar;
+    }
+
+    // set viewport to occupy full canvas
+    glViewport(0, 0, w, h);
+
+    // compute orthographic projection from viewing coordinates;
+    // we use Qt's 4x4 matrix class in place of legacy OpenGL code:
+    // glLoadIdentity();
+    // glOrtho(-xmax, xmax, -ymax, ymax, -1.0, 1.0);
+    m_projection.setToIdentity();
+    m_projection.ortho(-xmax, xmax, -ymax, ymax, -1.0, 1.0);
 }
 
 
@@ -86,7 +111,27 @@ HW2b::resizeGL(int w, int h)
 void
 HW2b::paintGL()
 {
-	// PUT YOUR CODE HERE
+    // clear canvas with background color
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // enable vertex shader point size adjustment
+    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+
+    // use glsl progam
+    glUseProgram(m_program[HW2B].programId());
+
+    // pass the following parameters to vertex the shader:
+    // MV, PROJ, THETA, SUBDIV, TWIST
+    glUniformMatrix4fv(m_uniform[HW2B][MV ], 1, GL_FALSE, m_modelview.constData ());
+    glUniformMatrix4fv(m_uniform[HW2B][PROJ ], 1, GL_FALSE, m_projection.constData ());
+
+    glDrawArrays(GL_TRIANGLES, 0, m_numPoints);
+
+    // terminate program; rendering is done
+    glUseProgram(0);
+
+    // disable vertex shader point size adjustment
+    glDisable(GL_VERTEX_PROGRAM_POINT_SIZE);
 }
 
 
@@ -257,9 +302,17 @@ HW2b::initVertexBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, m_numPoints*sizeof(vec2), &m_points[0], GL_STATIC_DRAW);
 
+    // enable vertex buffer to be accessed via the attribute vertex variable and specify data format
+    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    glVertexAttribPointer	 (ATTRIB_VERTEX, 2, GL_FLOAT, false, 0, 0);
+
 	// bind color buffer to the GPU and copy the colors from CPU to GPU
 	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
 	glBufferData(GL_ARRAY_BUFFER, m_numPoints*sizeof(vec3), &m_colors[0], GL_STATIC_DRAW);
+
+    // enable vertex buffer to be accessed via the attribute vertex variable and specify data format
+    glEnableVertexAttribArray(ATTRIB_COLOR);
+    glVertexAttribPointer(ATTRIB_COLOR, 3, GL_FLOAT, false, 0, NULL);
 
 	// clear vertex and color vectors because they have already been copied into GPU
 	m_points.clear();
@@ -276,7 +329,19 @@ HW2b::initVertexBuffer()
 void
 HW2b::divideTriangle(vec2 a, vec2 b, vec2 c, int count)
 {
-	// PUT YOUR CODE HERE
+    if (count == 0)
+        triangle(a,b,c);
+    else {
+        QVector2D ab, bc, ac;
+        ab = QVector2D((a[0]+b[0])/2, (a[1]+b[1])/2); // ab
+        bc = QVector2D((b[0]+c[0])/2, (b[1]+c[1])/2); // bc
+        ac = QVector2D((c[0]+a[0])/2, (c[1]+a[1])/2); // ca
+
+        divideTriangle(a, ab, ac, count-1);
+        divideTriangle(b, ab, bc, count-1);
+        divideTriangle(c, ac, bc, count-1);
+        divideTriangle(ab, bc, ac, count-1);
+    }
 }
 
 
