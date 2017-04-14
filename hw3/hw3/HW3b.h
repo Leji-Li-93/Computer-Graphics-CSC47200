@@ -27,7 +27,7 @@ class HW3b : public HW {
 	Q_OBJECT
 public:
 	// constructor
-	HW3b		(const QGLFormat &glf, QWidget *parent = 0);		
+	HW3b		(const QGLFormat &glf, QWidget *parent = 0);
 	QGroupBox*	controlPanel	();		// create control panel
 	void		reset		();		// reset parameters
 
@@ -81,7 +81,7 @@ private:
 	QSpinBox	 *m_spinBoxSpeed;		// speed combobox
 	QPushButton	 *m_buttonStart;		// play/pause button
 
-	std::vector<vec3> m_points;			
+	std::vector<vec3> m_points;
 	std::vector<vec2> m_coords;
 	std::vector<vec3> m_normals;
 	std::vector<vec3> m_colors;

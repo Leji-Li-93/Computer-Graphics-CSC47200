@@ -119,30 +119,46 @@ HW3a::paintGL()
 {
 	// clear canvas with background color
 	glClear(GL_COLOR_BUFFER_BIT);
+    glLineWidth(1.5f);
+
 
 	// bind vertex buffer to the GPU; enable buffer to be copied to the
 	// attribute vertex variable and specify data format
-	// PUT YOUR CODE HERE
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+	glEnableVertexAttribArray(ATTRIB_VERTEX);
+    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, false, 0, NULL);
 
 	// bind texture coord buffer to the GPU; enable buffer to be copied to the
 	// attribute texture coordinate variable and specify data format
-	// PUT YOUR CODE HERE
+	glBindBuffer(GL_ARRAY_BUFFER, m_texBuffer);
+	glEnableVertexAttribArray(ATTRIB_TEXCOORD);
+	glVertexAttribPointer(ATTRIB_TEXCOORD, 2, GL_FLOAT, false, 0, NULL);
 
 	// use texture glsl program
-	// PUT YOUR CODE HERE
+    glUseProgram(m_program[TEXTURE].programId());
 
 	// pass parameters to vertex shader
-	// PUT YOUR CODE HERE
+    glUniformMatrix4fv(m_uniform[TEXTURE][MV ], 1, GL_FALSE, m_modelview.constData ());
+    glUniformMatrix4fv(m_uniform[TEXTURE][PROJ ], 1, GL_FALSE, m_projection.constData ());
+    glUniform1fv(m_uniform[TEXTURE][THETA ], 1, &m_theta);
+    glUniform1i(m_uniform[TEXTURE][TWIST ], m_twist);
 
 	// draw texture mapped triangles
-	// PUT YOUR CODE HERE
-
-	glLineWidth(1.5f);
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_numPoints);
 
 	// draw wireframe, if necessary
 	if(m_wire) {
 		// PUT YOUR CODE HERE
+        glUseProgram(m_program[WIREFRAME].programId());	// use wireframe glsl progam
+        glUniformMatrix4fv(m_uniform[WIREFRAME][MV ], 1, GL_FALSE, m_modelview.constData ());
+        glUniformMatrix4fv(m_uniform[WIREFRAME][PROJ ], 1, GL_FALSE, m_projection.constData ());
+        glUniform1fv(m_uniform[WIREFRAME][THETA ], 1, &m_theta);
+        glUniform1i(m_uniform[WIREFRAME][TWIST ], m_twist);
+        for (int i = 0; i<m_numPoints; i += 3)
+            glDrawArrays(GL_LINE_LOOP, i, (GLsizei)3);
 	}
+
+	glUseProgram(0);
 }
 
 
@@ -345,6 +361,30 @@ HW3a::initVertexBuffer()
 	};
 
 	// PUT YOUR CODE HERE
+	// recursively subdivide triangle into triangular facets;
+	// store vertex positions and colors in m_points and m_colors, respectively
+	divideTriangle(vertices[0], vertices[1], vertices[2], m_subdivisions);
+	m_numPoints = (int) m_points.size();		// save number of vertices
+
+	// bind vertex buffer to the GPU and copy the vertices from CPU to GPU
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, m_numPoints*sizeof(vec2), &m_points[0], GL_STATIC_DRAW);
+
+	// enable vertex buffer to be accessed via the attribute vertex variable and specify data format
+    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    glVertexAttribPointer	 (ATTRIB_VERTEX, 2, GL_FLOAT, false, 0, 0);
+
+    // bind texture coord buffer to the GPU and copy the texture coordinates from CPU to GPU
+    glBindBuffer(GL_ARRAY_BUFFER, m_texBuffer);
+    glBufferData(GL_ARRAY_BUFFER, m_numPoints*sizeof(vec2), &m_coords[0], GL_STATIC_DRAW);
+
+    // enable buffer to be copied to the attribute texture coord variable and specify data format
+    glEnableVertexAttribArray(ATTRIB_TEXCOORD);
+    glVertexAttribPointer	 (ATTRIB_TEXCOORD, 2, GL_FLOAT, false, 0, NULL);
+
+	m_points.clear();
+    m_coords.clear();
+
 }
 
 
@@ -357,7 +397,19 @@ HW3a::initVertexBuffer()
 void
 HW3a::divideTriangle(vec2 a, vec2 b, vec2 c, int count)
 {
-	// PUT YOUR CODE HERE
+    if (count == 0)
+            triangle(a,b,c);
+    else {
+            QVector2D ab, bc, ac;
+            ab = QVector2D((a[0]+b[0])/2, (a[1]+b[1])/2); // ab
+            bc = QVector2D((b[0]+c[0])/2, (b[1]+c[1])/2); // bc
+            ac = QVector2D((c[0]+a[0])/2, (c[1]+a[1])/2); // ca
+
+            divideTriangle(a, ab, ac, count-1);
+            divideTriangle(b, ab, bc, count-1);
+            divideTriangle(c, ac, bc, count-1);
+            divideTriangle(ab, bc, ac, count-1);
+    }
 }
 
 
@@ -376,9 +428,9 @@ HW3a::triangle(vec2 v1, vec2 v2, vec2 v3)
 	m_points.push_back(v3);
 
 	// init texture coordinates
-	m_coords.push_back(vec2((v1.x()+.65)/1.3, (v1.y()+.375)/1.125));
-	m_coords.push_back(vec2((v2.x()+.65)/1.3, (v2.y()+.375)/1.125));
-	m_coords.push_back(vec2((v3.x()+.65)/1.3, (v3.y()+.375)/1.125));
+    m_coords.push_back(vec2((v1.x()+.65)/1.3, (v1.y()+.375)/1.125));
+    m_coords.push_back(vec2((v2.x()+.65)/1.3, (v2.y()+.375)/1.125));
+    m_coords.push_back(vec2((v3.x()+.65)/1.3, (v3.y()+.375)/1.125));
 }
 
 

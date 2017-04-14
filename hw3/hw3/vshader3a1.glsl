@@ -17,7 +17,7 @@ void main() {
 		float x = a_Position.x;
 		float y = a_Position.y;
 		float t = sqrt(x*x + y*y) * u_Theta;
-		gl_Position = u_Projection * vec4(x*cos(t)-y*sin(t), x*sin(t)+y*cos(t), 0, 1);
+		gl_Position = u_Modelview * u_Projection * vec4(x*cos(t)-y*sin(t), x*sin(t)+y*cos(t), 0, 1);
 	}
 	v_TexCoord = a_TexCoord;
 }
