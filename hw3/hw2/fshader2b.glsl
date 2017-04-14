@@ -3,7 +3,7 @@
 in  vec4 v_Color;		// varying variable for passing color from vertex shader
 out vec4 fragColor;
 
-void main()
+void main() 
 {
-	fragColor = v_Color;
+	// PUT YOUR CODE HERE
 }
