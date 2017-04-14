@@ -185,7 +185,7 @@ HW3b::paintGL()
         glUniformMatrix4fv(m_uniform[WIRE_SHADER][VIEW ], 1, GL_FALSE, m_camera->view().constData());
         glUniformMatrix4fv(m_uniform[WIRE_SHADER][PROJ ], 1, GL_FALSE, m_projection.constData());
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicesBuffer[0]);
-        glDrawElements(GL_TRIANGLES, (GLsizei) m_indices_triangles.size(), GL_UNSIGNED_SHORT, 0);
+        glDrawElements(GL_LINE_STRIP, (GLsizei) m_indices_triangles.size(), GL_UNSIGNED_SHORT, 0);
         break;
     case FLAT_COLOR:
         glUseProgram(m_program[FLAT_SHADER].programId());
@@ -405,11 +405,11 @@ HW3b::resetMesh()
                 vec.setZ(((i > m_grid*3/4 && j>m_grid* 3/4)) ? 0.5f : 0.0f);
                 break;
             case HILL:
-                // PUT YOUR CODE HERE
+                vec.setZ(sin(3.14*((float)i/(float)m_grid)) + sin(3.14*((float)j/(float)m_grid)));
                 break;
             case HILLFOUR:
                 // PUT YOUR CODE HERE
-                vec.setZ(vec.z()+m_veloc[i][j]);
+                vec.setZ(sin(3.14*2 * ((float)i/(float)m_grid)) + sin(3.14*2 * ((float)j/(float)m_grid)));
                 break;
         }
        }
