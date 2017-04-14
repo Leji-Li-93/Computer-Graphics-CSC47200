@@ -390,7 +390,7 @@ HW3b::resetMesh()
                 vec.setZ(!((i > m_grid/3 && j > m_grid/3)&&(i < m_grid*2/3 && j < m_grid*2/3)) ? 0.5f : 0.0f);
                 break;
             case DIAGONALWALL:
-                vec.setZ((((m_grid-i)-j<3) && ((m_grid-i)-j>0)) ? m_grid/6 : 0.0);
+                vec.setZ((((m_grid-i)-j<3) && ((m_grid-i)-j>0)) ? 0.3f : 0.0);
                 break;
             case SIDEWALL:
                 vec.setZ((i == 1) ? 0.5f : 0.0f);
@@ -409,7 +409,7 @@ HW3b::resetMesh()
                 break;
             case HILLFOUR:
                 // PUT YOUR CODE HERE
-                vec.setZ(sin(3.14*2 * ((float)i/(float)m_grid)) + sin(3.14*2 * ((float)j/(float)m_grid)));
+                vec.setZ(sin(3.14*1.5 * ((float)i/(float)m_grid)) + sin(3.14*1.5 * ((float)j/(float)m_grid)));
                 break;
         }
        }
