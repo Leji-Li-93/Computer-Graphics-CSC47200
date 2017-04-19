@@ -117,11 +117,11 @@ HW3b::resizeGL(int w, int h)
     // set viewport to occupy full canvas
     glViewport(0, 0, w, h);
 
-    h = (w == 0) ? 1 : h;
+    //h = (w == 0) ? 1 : h;
 
     glMatrixMode(GL_PROJECTION);
     m_projection.setToIdentity();
-    m_projection.perspective(60.0, (float)w/(float)h, 1.0, 30.0);
+    m_projection.perspective(45.0f, (float)w/(float)h, 1.0f, 30.0f);
 }
 
 
@@ -184,8 +184,8 @@ HW3b::paintGL()
         glUseProgram(m_program[WIRE_SHADER].programId());
         glUniformMatrix4fv(m_uniform[WIRE_SHADER][VIEW ], 1, GL_FALSE, m_camera->view().constData());
         glUniformMatrix4fv(m_uniform[WIRE_SHADER][PROJ ], 1, GL_FALSE, m_projection.constData());
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicesBuffer[0]);
-        glDrawElements(GL_LINE_STRIP, (GLsizei) m_indices_triangles.size(), GL_UNSIGNED_SHORT, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicesBuffer[1]);
+        glDrawElements(GL_LINES, (GLsizei) m_indices_wireframe.size(), GL_UNSIGNED_SHORT, 0);
         break;
     case FLAT_COLOR:
         glUseProgram(m_program[FLAT_SHADER].programId());
