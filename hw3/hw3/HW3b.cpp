@@ -117,8 +117,6 @@ HW3b::resizeGL(int w, int h)
     // set viewport to occupy full canvas
     glViewport(0, 0, w, h);
 
-    //h = (w == 0) ? 1 : h;
-
     glMatrixMode(GL_PROJECTION);
     m_projection.setToIdentity();
     m_projection.perspective(45.0f, (float)w/(float)h, 1.0f, 30.0f);
@@ -405,11 +403,13 @@ HW3b::resetMesh()
                 vec.setZ(((i > m_grid*3/4 && j>m_grid* 3/4)) ? 0.5f : 0.0f);
                 break;
             case HILL:
-                vec.setZ(sin(3.14*((float)i/(float)m_grid)) + sin(3.14*((float)j/(float)m_grid)));
+                vec.setZ(sin(3.14*((float)i/(float)m_grid))/4 +
+                         sin(3.14*((float)j/(float)m_grid))/4);
                 break;
             case HILLFOUR:
                 // PUT YOUR CODE HERE
-                vec.setZ(sin(3.14*1.5 * ((float)i/(float)m_grid)) + sin(3.14*1.5 * ((float)j/(float)m_grid)));
+                vec.setZ(sin(3.14*2 * ((float)i/(float)m_grid))/3 +
+                         sin(3.14*2 * ((float)j/(float)m_grid))/3);
                 break;
         }
        }
